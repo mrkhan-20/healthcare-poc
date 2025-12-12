@@ -11,3 +11,5 @@ aiofiles
 python-magic
 dotenv
 psycopg2-binary
+pytest
+httpx

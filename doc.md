@@ -105,4 +105,16 @@ Deletes metadata + blob.
 * No direct blob URLs.
 * HTTPS required + secrets stored in environment.
 
+
+### Why did you choose this file-storage approach?
+
+Using Azure Blob (object storage) decouples large PDF binaries from the database, scales automatically, is cost-efficient, and provides built-in durability/security. Metadata stays in Postgres for fast queries while files live in a storage tier optimized for large objects.
+
+### If this were HIPAA-compliant, what changes would you make?
+
+Add strict access controls (RBAC), private networking, encryption with customer-managed keys, detailed audit logging, and malware/PHI-safe handling. Require a BAA with the cloud provider and enforce HIPAA-grade logging, monitoring, and incident response processes.
+
+### How would you integrate antivirus scanning?
+
+Upload files to a quarantine bucket, trigger a scanner (ClamAV or cloud AV service), and mark documents clean before allowing downloads. Infected files are blocked/deleted, and metadata tracks scan status.
 ---
