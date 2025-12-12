@@ -1,0 +1,112 @@
+# Technical Design Document — Healthcare Document Manager (Concise)
+
+## 1. Tech Stack & Architecture
+
+**Frontend:** React — simple, fast for building upload UI.
+**Backend:** FastAPI — async, performant, built‑in validation & OpenAPI.
+**DB:** PostgreSQL — reliable relational store for metadata.
+**Storage:** Azure Blob Storage — scalable object storage for PDF binaries.
+**Auth:** JWT (mock).
+**Optional Cache:** Redis for faster reads.
+
+### Architecture Overview
+
+```
+React UI → FastAPI → PostgreSQL (metadata)
+                     ↘ Azure Blob Storage (PDF files)
+```
+
+The backend handles all validations and never exposes storage credentials. The DB stores only metadata; PDFs reside in blob storage.
+
+---
+
+## 2. Data Flow
+
+### Upload Flow
+
+1. User selects PDF → React sends `multipart/form-data` to backend.
+2. FastAPI validates JWT, file type, size, and magic bytes.
+3. Backend generates a blob name and uploads binary to Azure Blob.
+4. Metadata (filename, size, blob key, patient_id) is stored in Postgres.
+5. API returns metadata JSON.
+
+### Download Flow
+
+1. Client requests `GET /documents/:id/download`.
+2. Backend checks authorization → fetches metadata → streams file from Blob Storage.
+3. Client downloads PDF (never sees direct blob path).
+
+**Separation:**
+
+* **Postgres:** only structured metadata.
+* **Azure Blob:** raw PDF bytes.
+
+---
+
+## 3. API Specification
+
+Base path: `/api` — All require JWT.
+
+### POST /documents/upload
+
+**Type:** `multipart/form-data`
+**Fields:**
+
+* `patient_id`: string
+* `file`: PDF file
+
+**Response:**
+
+```json
+{
+  "id": 1,
+  "patient_id": "p123",
+  "filename": "doc.pdf",
+  "size": 20480,
+  "uploaded_at": "2025-01-01T10:00:00Z"
+}
+```
+
+### GET /documents?patient_id=
+
+Returns list of documents for a patient.
+
+### GET /documents/:id/download
+
+Streams PDF file to client with proper headers.
+
+### DELETE /documents/:id
+
+Deletes metadata + blob.
+
+---
+
+## 4. Key Considerations
+
+### Scalability
+
+* Stateless API; horizontally scalable.
+* Blob Storage handles large dataset easily.
+* Async I/O supports high upload/download throughput.
+
+### File Storage
+
+* PDFs stored in Azure Blob; DB stores only metadata.
+* Blob keys are UUID-based and opaque.
+
+### Error Handling
+
+* Missing file → return 404 or 410.
+* Corrupted/mismatched content type → reject upload.
+* DB/storage outage → return structured error JSON.
+
+### Security
+
+* JWT-protected APIs.
+* Server-side validation of PDFs.
+* No direct blob URLs unless using temporary SAS tokens.
+* HTTPS required + secrets stored in environment/Key Vault.
+
+---
+
+This concise version captures the full design while remaining short and implementation-ready.
