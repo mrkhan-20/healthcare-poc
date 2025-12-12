@@ -31,7 +31,7 @@ The backend handles all validations and never exposes storage credentials. The D
 
 ### Download Flow
 
-1. Client requests `GET /documents/:id/download`.
+1. Client requests `GET /files/:id/download`.
 2. Backend checks authorization → fetches metadata → streams file from Blob Storage.
 3. Client downloads PDF (never sees direct blob path).
 
@@ -46,7 +46,7 @@ The backend handles all validations and never exposes storage credentials. The D
 
 Base path: `/api` — All require JWT.
 
-### POST /documents/upload
+### POST /files/upload
 
 **Type:** `multipart/form-data`
 **Fields:**
@@ -66,15 +66,15 @@ Base path: `/api` — All require JWT.
 }
 ```
 
-### GET /documents?patient_id=
+### GET /files?patient_id=
 
-Returns list of documents for a patient.
+Returns list of files for a patient.
 
-### GET /documents/:id/download
+### GET /files/:id/download
 
 Streams PDF file to client with proper headers.
 
-### DELETE /documents/:id
+### DELETE /files/:id
 
 Deletes metadata + blob.
 
