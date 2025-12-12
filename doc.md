@@ -44,7 +44,6 @@ The backend handles all validations and never exposes storage credentials. The D
 
 ## 3. API Specification
 
-Base path: `/api` — All require JWT.
 
 ### POST /files/upload
 
@@ -103,9 +102,7 @@ Deletes metadata + blob.
 
 * JWT-protected APIs.
 * Server-side validation of PDFs.
-* No direct blob URLs unless using temporary SAS tokens.
-* HTTPS required + secrets stored in environment/Key Vault.
+* No direct blob URLs.
+* HTTPS required + secrets stored in environment.
 
 ---
-
-This concise version captures the full design while remaining short and implementation-ready.
