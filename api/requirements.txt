@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+SQLAlchemy==1.4.50
+asyncpg
+python-dotenv
+azure-storage-blob[aio]
+pydantic
+python-multipart
+PyJWT
+aiofiles
+python-magic
+dotenv
+psycopg2-binary
