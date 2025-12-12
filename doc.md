@@ -2,12 +2,11 @@
 
 ## 1. Tech Stack & Architecture
 
-**Frontend:** React — simple, fast for building upload UI.
-**Backend:** FastAPI — async, performant, built‑in validation & OpenAPI.
-**DB:** PostgreSQL — reliable relational store for metadata.
-**Storage:** Azure Blob Storage — scalable object storage for PDF binaries.
-**Auth:** JWT (mock).
-**Optional Cache:** Redis for faster reads.
+1.**Frontend:** React — simple, fast for building upload UI.
+2.**Backend:** FastAPI — async, performant, built‑in validation & OpenAPI.
+3.**DB:** PostgreSQL — reliable relational store for metadata.
+4.**Storage:** Azure Blob Storage — scalable object storage for PDF binaries.
+5.**Auth:** JWT (mock).
 
 ### Architecture Overview
 
